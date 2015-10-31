@@ -3,6 +3,10 @@ class Rlisp
 
   def initialize(ext = {})
     @env = {
+      :true  => lambda { |*list| true },
+      :false => lambda { |*list| false },
+      :list  => lambda { |*list| Array(list) },
+      :null? => lambda {  |list| list.empty? },
       :min   => lambda { |*list| list.min },
       :max   => lambda { |*list| list.max },
       :car   => lambda { |*list| list[0] },
@@ -25,7 +29,11 @@ class Rlisp
   end
 
   def tokenize(chars)
-    chars.gsub('(', ' ( ').gsub(')', ' ) ').split(' ')
+    chars
+      .gsub(/\s\s+/, ' ')
+      .gsub('(', ' ( ')
+      .gsub(')', ' ) ')
+      .split(' ')
   end
 
   def read_from_tokens(tokens)
@@ -83,11 +91,14 @@ class Rlisp
     end
   end
 end
-
-rlisp = Rlisp.new
-p rlisp.run("(define r 10)")
-p rlisp.run("(define pi 3.14)")
-p rlisp.run("(* pi (* r r))")
-
-p rlisp.run("(define circle-area (lambda (r) (* pi (* r r))))")
-p rlisp.run("(circle-area 11)")
+#
+# rlisp = Rlisp.new
+# p rlisp.run("(define r 10)")
+# p rlisp.run("(define pi 3.14)")
+# p rlisp.run("(* pi (* r r))")
+#
+# p rlisp.run("(define circle-area (lambda (r) (* pi (* r r))))")
+# p rlisp.run("(circle-area 11)")
+#
+# p rlisp.run("(null? (list 1))")
+# p rlisp.run("(null? (list))")
