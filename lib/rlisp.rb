@@ -90,9 +90,23 @@ class Rlisp
       code.(*args)
     end
   end
+
+  def repl(prompt = 'lisp >> ')
+    while true
+      print prompt
+      program = gets
+
+      begin
+        p run(program)
+      rescue Exception => e
+        p e
+      end
+    end
+  end
 end
-#
-# rlisp = Rlisp.new
+
+rlisp = Rlisp.new
+rlisp.repl
 # p rlisp.run("(define r 10)")
 # p rlisp.run("(define pi 3.14)")
 # p rlisp.run("(* pi (* r r))")
@@ -102,3 +116,6 @@ end
 #
 # p rlisp.run("(null? (list 1))")
 # p rlisp.run("(null? (list))")
+#
+# p rlisp.run('(define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))')
+# p rlisp.run('(fact 10)')
